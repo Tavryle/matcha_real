@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    
+    <link rel="stylesheet" type="text/css" href="/stylesheets/settings.css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/nav.css">
+
+</head>
+<body onload="login()">
+    <input type="hidden" value=<%=session.user %> id='me'>
+    
+    <div id="notification-links">
+        <a id="notification-link" href="javascript:void(0)" onclick="displayNotifications()">new notifications</a>
+        <a id="message-link" href="javascript:void(0)" onclick="displayMessages()">peep messages</a>
+        <a href="/my_notifications">notifications</a>
+    </div>
+    <div id="notification-bar"></div>
+    <div id="message-bar"></div>
+    
+    <nav>
+        <div id="main_menu">
+            <a href="/">home</a>
+            <a href="/chats">chats</a>
+            <a href="/connection_requests">requests</a>
+            <a href="/search_match">search</a>
+            <a href="javascript:void(0);" onclick="userSubMenu()">
+                <img id="profile_pic" src=<%=session.profile_pic %> alt="sub menu">
+            </a>
+        </div>
+
+        <div id="user_sub_menu">
+            <a href="javascript:void(0);" onclick="userSubMenu()">
+                <img id="profile_pic" src=<%=session.profile_pic %> alt="sub menu">
+            </a>
+            <a href="/My_pictures">proflie views</a>
+            <a href="/My_pictures">my pics</a>
+            <a href="/settings">settings</a>
+            <a href="/logout">logout</a>
+        </div>
+    </nav>
+    
+    <main>
+        <% if (error != 'none'){ %>
+            <span id="error"><%=error%></span>
+        <% } %>
+        <% if (msg != 'none'){ %>
+            <span id="msg"><%=msg%></span>
+        <% } %>
+
+        <button class="toggle" id="personal_btn" onclick="togglePersonalForm()">personal details</button>
+        <form style="display: none;" class="info_class" id="personal_form" method="POST" action="/settings">
+            
+            <label for="username">enter Username</label>
+            <input type="text" name="username" pattern="[a-zA-Z0-9]{1,25}"
+            required title="username can only contain alphabets, numbers and must not be longer than 25 characters" 
+            value=<%=session.user %>>
+        
+            <label for="Firstname">enter Firstname</label>
+            <input type="text" name="Firstname" pattern="[a-zA-Z0-9]{1,25}"
+            required title="Firstname can only contain alphabets, numbers and must not be longer than 25 characters"
+            value=<%=session.Firstname %>>
+
+            <label for="Lastname">enter Lastname</label>
+            <input ype="text" name="Lastname" pattern="[a-zA-Z0-9]{1,25}"
+            required title="Lastname can only contain alphabets, numbers and must not be longer than 25 characters"
+            value=<%=session.Lastname %>>
+
+            <label for="Email">enter Email</label>
+            <input type="email" name="Email" required value=<%=session.Email %>>
+
+            <button type="submit" tabindex="5">update details</button>
+        </form>
+
+        <button class="toggle" id="age_btn" onclick="toggleAgeForm()">change age</button>
+        <form style="display: none;" id="age_form" action="/settings" method="post">
+            <label for="username">enter age</label>
+            <input type="number" name="age" min='18' max="130" required>
+            <button type="submit" tabindex="5">update </button>
+        </form>
+
+
+        <button class="toggle" id="password_btn" onclick="togglePasswordForm()">change password</button>
+        <form style="display: none;" id="password_form" method="POST" action="/settings">
+
+            <span class="inner_h">Change your password</span>
+            
+            <label for="password">Enter password</label>
+            <input type="password"  name="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}"
+            title="Must contain at least one number and
+             one uppercase and lowercase letter, and at least 8 or more">
+
+            <label for="vPassword">Confirm Password</label>
+            <input type="password" name="vPassword" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{5,}"
+            title="Must contain at least one number and
+             one uppercase and lowercase letter, and at least 8 or more">
+            
+            <button type="submit">Update password</button>
+        </form>
+        
+        <button class="toggle" id="hobbies_btn" onclick="toggleHobbiesForm()">change hobbies</button>
+        <form style="display: none;" id="hobbies_form" method="POST" action="/settings">
+            <span class="inner_h">Change your password</span>
+            
+            <label for="hobby1">Choose 1st Hobby</label>
+            <input type="text" name="hobby1">
+
+            <label for="hobby2">Choose 2nd Hobby</label>
+            <input type="text" name="hobby2">
+             
+            <label for="hobby3">Choose 3rd Hobby</label>
+            <input type="text" name="hobby3">
+            
+            <label for="hobby4">Choose 4th Hobby</label>
+            <input type="text" name="hobby4">
+               
+            <label for="hobby5">Choose 5th Hobby</label>
+            <input type="text" name="hobby5">
+            
+            <button type="submit">Update interests</button>
+        </form>
+
+        <button class="toggle" id="loaction_btn" onclick="toggleLocationForm()">location</button>
+        <div style="display: none;" id="location_form">
+            <form method="POST" action="/settings">
+                <button type="submit">update location</button>
+            </form>
+        </div>
+        
+        <button class="toggle" id="additional_btn" onclick="toggleAdditionalForm()">additional info</button>
+        <form style="display: none;" id="additional_form" class="additional_bio" method="POST" action="/settings">
+            <div class="div_gender">
+                <label for="gender">enter your gender</label>
+                <input type="text" name="Gender" required>
+            </div>
+            <span>sexaul preference</span>
+            <ul class="orientation_list">
+                <li>
+                    <label for="male">male</label><br>
+                    <input type="radio" name="Orientation" value="male" required>
+                </li>
+                <li>
+                    <label for="female">female</label><br>
+                    <input type="radio" name="Orientation" value="female" required>    
+                </li>
+                <li>
+                    <label for="bisexual">bisexual</label>
+                    <input type="radio" name="Orientation" value="bisexual" required>
+                </li>
+            </ul>
+            <label for="Bio">Tell us a little about yourself</label>
+            <textarea id="Bio" name="Bio" required></textarea>
+            <button type="submit">Add additional info</button>
+        </form>
+
+    </main>
+    
+    <footer>
+        <a href="#">matcha dating app</a>
+    </footer>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="javascripts/notification.js"></script>
+    <script src="javascripts/nav.js"></script>
+    <script src="javascripts/settings.js"></script>
+
+</body>
+</html>

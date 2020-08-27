@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>messages</title>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/javascripts/messages.js"></script>
+  <link rel="stylesheet" type="text/css" href="/stylesheets/nav.css">
+  <link rel="stylesheet" type="text/css" href="/stylesheets/messages.css">
+</head>
+<body onload="login()">
+  <input type="hidden" value=<%=session.user %> id='me'>
+  <input type="hidden" value=<%=themName %> id='them'>
+
+  <div id="notification-links">
+    <a id="notification-link" href="javascript:void(0)" onclick="displayNotifications()">new notifications</a>
+    <!-- <a id="message-link" href="javascript:void(0)" onclick="displayMessages()">peep messages</a> -->
+    <a href="/my_notifications">notifications</a>
+  </div>
+  <div id="notification-bar"></div>
+  <!-- <div id="message-bar"></div> -->
+  
+  <nav>
+    <div id="main_menu">
+        <a href="/">home</a>
+        <a href="/chats">chats</a>
+        <a href="/connection_requests">requests</a>
+        <a href="/search_match">search</a>
+        <a href="javascript:void(0);" onclick="userSubMenu()">
+            <img id="profile_pic" src=<%=session.profile_pic %> alt="menu">
+        </a>
+    </div>
+    <div id="user_sub_menu">
+        <a href="javascript:void(0);" onclick="userSubMenu()">
+            <img id="profile_pic" src=<%=session.profile_pic %> alt="menu">
+        </a>
+        <a href="/profile_views">my profile views</a>
+        <a href="/My_pictures">my pics</a>
+        <a href="/settings">settings</a>
+        <a href="/logout">logout</a>
+    </div>
+  </nav>
+  <main >
+    <h1>messages</h1>
+    <span id="_match_status"></span>
+    <hr>
+    <div id="messages">
+      <%
+        let themNum1 = themNum - 1;
+        let i = 4;
+        while (themNum1 >= 0){
+          let msg = themMsg[themNum1].message; 
+          let name = themName;
+          let time = themMsg[themNum1].date_time;
+      %>
+          <div class="message-them">
+            <p><%= name%></p>
+            <p><%= msg%></p>
+            <p><%= time%></p>
+          </div>  
+      <%
+        themNum1--;
+        }
+      %>
+      <%
+        let meNum1 = meNum - 1;
+        i = 4;
+        while (meNum1 >= 0){
+          msg = meMsg[meNum1].message; 
+          name = meName;
+          time = meMsg[meNum1].date_time;
+      %>
+          <div class="message-me">
+            <p><%= name%> (me)</p>
+            <p><%= msg%></p>
+            <% let isSeen = (meMsg[meNum1].msg_state == '1')? 'seen' : 'message unseen'; %>
+            <p class="seen">seen: <%= isSeen %></p>
+            <p><%= time%></p>
+          </div>  
+      <%
+        meNum1--;
+        }
+      %>
+    </div>
+    <div id="msg-area">
+        <input type="text" name="them" id="them" value="<%= themName%>" style="display: none;">
+        <input type="text" name="me" id="me" value="<%= meName%>" style="display: none;">
+        <input type="text" name="socket_id" id="socketId" value="" style="display: none;">
+        <!-- <input type="textarea" name="msg" id="msg" required> -->
+        <textarea name="msg" id="msg" rows="2" required></textarea>
+        <button  onclick="sendBtn()" >send</button>
+    </div>
+  </main>
+
+
+
+  <footer>
+    <a href="#">match dating web application</a>
+  </footer>
+  <script src="/javascripts/nav.js"></script>
+</body>
+</html>
